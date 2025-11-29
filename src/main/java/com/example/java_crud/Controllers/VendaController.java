@@ -51,4 +51,10 @@ public class VendaController {
     public void excluir(@PathVariable Long id) {
         vendaService.excluir(id);
     }
+
+    @GetMapping("/buscar")
+    public List<Venda> buscar(@RequestParam String q) {
+        return vendaService.buscar(q);
+    }
+
 }

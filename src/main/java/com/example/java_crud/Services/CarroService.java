@@ -56,4 +56,11 @@ public class CarroService {
         return repo.findByPlacaIgnoreCaseAndExcluidoFalse(placa)
                 .orElseThrow(() -> new NotFoundException("Placa não encontrada"));
     }
+
+    public List<Carro> buscar(String termo) {
+        return repo.findByModeloContainingIgnoreCaseOrMarcaContainingIgnoreCaseOrPlacaContainingIgnoreCase(
+                termo, termo, termo
+        );
+    }
+
 }

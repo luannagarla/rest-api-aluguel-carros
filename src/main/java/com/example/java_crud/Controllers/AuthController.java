@@ -4,6 +4,7 @@ import com.example.java_crud.DTOs.LoginRequest;
 import com.example.java_crud.Exceptions.ValidationException;
 import com.example.java_crud.Models.Funcionario;
 import com.example.java_crud.Services.FuncionarioService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,16 +19,24 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(
+            @RequestBody LoginRequest request,
+            HttpSession session
+    ) {
 
         try {
-            Funcionario funcionario =
-                    funcionarioService.login(request.getMatricula(), request.getSenha());
+            Funcionario funcionario = funcionarioService.login(
+                    request.getMatricula(),
+                    request.getSenha()
+            );
 
-            return ResponseEntity.ok(funcionario);
+            session.setAttribute("usuario", funcionario);
 
-        } catch (ValidationException e) {
+            return ResponseEntity.ok("Logado com sucesso");
+        }
+        catch (ValidationException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }
+
 }

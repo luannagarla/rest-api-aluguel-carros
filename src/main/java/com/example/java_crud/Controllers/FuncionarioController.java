@@ -48,4 +48,9 @@ public class FuncionarioController {
         service.excluir(id);
     }
 
+    @GetMapping("/buscar")
+    public List<Funcionario> buscar(@RequestParam String q) {
+        return service.buscar(q);
+    }
+
 }

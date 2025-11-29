@@ -58,4 +58,20 @@ public class VendaService {
 
         vendaRepo.deleteById(id);
     }
+
+    public List<Venda> buscar(String q) {
+
+        if (q.matches("\\d+")) {
+            Long idCliente = Long.parseLong(q);
+            return vendaRepo.findByClienteId(idCliente);
+        }
+
+        if (q.length() >= 3 && q.length() <= 8) {
+            List<Venda> vendasPorPlaca = vendaRepo.findByCarroPlacaContainingIgnoreCase(q);
+            if (!vendasPorPlaca.isEmpty()) return vendasPorPlaca;
+        }
+
+        return vendaRepo.findByClienteNomeContainingIgnoreCase(q);
+    }
+
 }

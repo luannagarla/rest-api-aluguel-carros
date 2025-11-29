@@ -58,4 +58,10 @@ public class CarroController {
     public List<Carro> listarDisponiveis() {
         return service.listarDisponiveis();
     }
+
+    @GetMapping("/buscar")
+    public List<Carro> buscar(@RequestParam String q) {
+        return service.buscar(q);
+    }
+
 }

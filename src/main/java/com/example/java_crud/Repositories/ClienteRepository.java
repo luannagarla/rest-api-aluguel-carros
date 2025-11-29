@@ -12,4 +12,6 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     List<Cliente> findByExcluidoFalse();
     Optional<Cliente> findByNomeIgnoreCaseAndExcluidoFalse(String nome);
+
+    List<Cliente> findByNomeContainingIgnoreCaseAndExcluidoFalse(String nome);
 }

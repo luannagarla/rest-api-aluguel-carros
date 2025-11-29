@@ -13,4 +13,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
 
     List<Funcionario> findByExcluidoFalse();
     Optional<Funcionario> findByNomeIgnoreCaseAndExcluidoFalse(String nome);
+    List<Funcionario> findByNomeContainingIgnoreCaseAndExcluidoFalse(String nome);
 }

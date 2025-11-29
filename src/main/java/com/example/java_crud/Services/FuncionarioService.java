@@ -50,4 +50,9 @@ public class FuncionarioService {
         return repo.findByNomeIgnoreCaseAndExcluidoFalse(nome)
                 .orElseThrow(() -> new NotFoundException("Funcionário não encontrado"));
     }
+
+    public List<Funcionario> buscar(String nome) {
+        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(nome);
+    }
+
 }

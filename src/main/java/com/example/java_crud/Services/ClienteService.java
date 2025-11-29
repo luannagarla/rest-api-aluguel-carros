@@ -44,4 +44,9 @@ public class ClienteService {
         return repo.findByNomeIgnoreCaseAndExcluidoFalse(nome)
                 .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
     }
+
+    public List<Cliente> buscar(String nome) {
+        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(nome);
+    }
+
 }

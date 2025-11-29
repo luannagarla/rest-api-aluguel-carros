@@ -47,4 +47,10 @@ public class ClienteController {
     public void excluir(@PathVariable Long id) {
         service.excluir(id);
     }
+
+    @GetMapping("/buscar")
+    public List<Cliente> buscar(@RequestParam String q) {
+        return service.buscar(q);
+    }
+
 }
