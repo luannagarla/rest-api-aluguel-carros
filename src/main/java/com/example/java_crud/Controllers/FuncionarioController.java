@@ -2,6 +2,7 @@ package com.example.java_crud.Controllers;
 
 import com.example.java_crud.Models.Funcionario;
 import com.example.java_crud.Services.FuncionarioService;
+import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,13 @@ public class FuncionarioController {
     }
 
     @PostMapping
-    public Funcionario salvar(@RequestBody Funcionario funcionario) {
+    public Funcionario salvar(@Valid @RequestBody Funcionario funcionario)
+    {
         return service.salvar(funcionario);
     }
 
     @PutMapping("/{id}")
-    public Funcionario editar(@PathVariable Long id, @RequestBody Funcionario funcionario) {
+    public Funcionario editar(@PathVariable Long id, @Valid @RequestBody Funcionario funcionario) {
         funcionario.setId(id);
         return service.salvar(funcionario);
     }

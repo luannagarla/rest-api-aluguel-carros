@@ -7,11 +7,13 @@ import com.example.java_crud.Models.Funcionario;
 import com.example.java_crud.Repositories.CarroRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CarroService {
 
     private final CarroRepository repo;
@@ -25,13 +27,12 @@ public class CarroService {
             return repo.save(carro);
         }
         catch (DataIntegrityViolationException e) {
-            throw new ValidationException("Placa já cadastrada");
+            throw new ValidationException("Placa já cadastrada.");
         }
         catch (Exception e) {
-            throw new ValidationException("Erro ao salvar o carro");
+            throw new ValidationException("Erro ao salvar o carro.");
         }
     }
-
 
     public List<Carro> listarTodos() {
         return repo.findAll();
@@ -42,10 +43,12 @@ public class CarroService {
                 .orElseThrow(() -> new NotFoundException("Carro não encontrado"));
     }
 
+    @Transactional
     public void excluir(Long id) {
-        Carro c = buscarPorId(id);
-        c.setExcluido(true);
-        repo.save(c);
+        if (!repo.existsById(id)) {
+            throw new NotFoundException("Carro não encontrado");
+        }
+        repo.softDelete(id);
     }
 
     public List<Carro> listarDisponiveis() {
@@ -62,5 +65,4 @@ public class CarroService {
                 termo, termo, termo
         );
     }
-
 }

@@ -23,16 +23,27 @@ public class VendaService {
     }
 
     public Venda salvar(Venda venda) {
+
         if (venda.getCarro() == null ||
                 venda.getCliente() == null ||
-                venda.getFuncionario() == null)
+                venda.getFuncionario() == null) {
             throw new ValidationException("Venda incompleta");
+        }
 
         Carro carro = carroRepo.findById(venda.getCarro().getId())
                 .orElseThrow(() -> new NotFoundException("Carro não encontrado"));
 
-        if (!carro.isDisponivel())
+        if (!carro.isDisponivel()) {
             throw new ValidationException("Carro não está disponível");
+        }
+
+        if (venda.getDataInicio() == null || venda.getDataFim() == null) {
+            throw new ValidationException("As datas da venda são obrigatórias");
+        }
+
+        if (venda.getDataInicio().isAfter(venda.getDataFim())) {
+            throw new ValidationException("A data de início não pode ser maior que a data final");
+        }
 
         carro.setDisponivel(false);
         carroRepo.save(carro);
@@ -68,10 +79,11 @@ public class VendaService {
 
         if (q.length() >= 3 && q.length() <= 8) {
             List<Venda> vendasPorPlaca = vendaRepo.findByCarroPlacaContainingIgnoreCase(q);
-            if (!vendasPorPlaca.isEmpty()) return vendasPorPlaca;
+            if (!vendasPorPlaca.isEmpty()) {
+                return vendasPorPlaca;
+            }
         }
 
         return vendaRepo.findByClienteNomeContainingIgnoreCase(q);
     }
-
 }

@@ -8,6 +8,7 @@ import com.example.java_crud.Services.CarroService;
 import com.example.java_crud.Services.ClienteService;
 import com.example.java_crud.Services.FuncionarioService;
 import com.example.java_crud.Services.VendaService;
+import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,12 +38,12 @@ public class VendaController {
     }
 
     @PostMapping
-    public Venda salvar(@RequestBody Venda venda) {
+    public Venda salvar(@Valid @RequestBody Venda venda) {
         return vendaService.salvar(venda);
     }
 
     @PutMapping("/{id}")
-    public Venda editar(@PathVariable Long id, @RequestBody Venda venda) {
+    public Venda editar(@PathVariable Long id, @Valid @RequestBody Venda venda) {
         venda.setId(id);
         return vendaService.salvar(venda);
     }

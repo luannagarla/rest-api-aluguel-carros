@@ -1,6 +1,7 @@
 package com.example.java_crud.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,19 +13,26 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "O cliente é obrigatório")
     @ManyToOne(optional = false)
     private Cliente cliente;
 
+    @NotNull(message = "O funcionário é obrigatório")
     @ManyToOne(optional = false)
     private Funcionario funcionario;
 
+    @NotNull(message = "O carro é obrigatório")
     @ManyToOne(optional = false)
     private Carro carro;
 
+    @NotNull(message = "A data de início é obrigatória")
     private LocalDate dataInicio;
 
+    @NotNull(message = "A data de fim é obrigatória")
     private LocalDate dataFim;
 
+    @NotNull(message = "O valor total é obrigatório")
+    @Positive(message = "O valor total deve ser maior que zero")
     private BigDecimal valorTotal;
 
     public Long getId() { return id; }

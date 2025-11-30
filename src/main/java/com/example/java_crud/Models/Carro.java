@@ -1,16 +1,20 @@
 package com.example.java_crud.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "carros")
 public class Carro extends Veiculo {
 
+    @NotBlank(message = "A categoria é obrigatória")
     private String categoria;
 
+    @NotNull(message = "A quilometragem é obrigatória")
+    @Min(value = 0, message = "A quilometragem não pode ser negativa")
     private Integer quilometragem;
 
-    @Column(nullable = false)
+    @NotNull
     private Boolean excluido = false;
 
     public String getCategoria() { return categoria; }

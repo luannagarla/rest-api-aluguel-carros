@@ -4,7 +4,9 @@ import com.example.java_crud.Exceptions.NotFoundException;
 import com.example.java_crud.Exceptions.ValidationException;
 import com.example.java_crud.Models.Funcionario;
 import com.example.java_crud.Repositories.FuncionarioRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +21,15 @@ public class FuncionarioService {
     }
 
     public Funcionario salvar(Funcionario funcionario) {
-        return repo.save(funcionario);
+        try {
+            return repo.save(funcionario);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new ValidationException("CPF, login ou matrícula já cadastrados.");
+        }
+        catch (Exception e) {
+            throw new ValidationException("Erro ao salvar funcionário.");
+        }
     }
 
     public List<Funcionario> listarTodos() {
@@ -35,10 +45,12 @@ public class FuncionarioService {
                 .orElseThrow(() -> new NotFoundException("Funcionário não encontrado"));
     }
 
+    @Transactional
     public void excluir(Long id) {
-        Funcionario f = buscarPorId(id);
-        f.setExcluido(true);
-        repo.save(f);
+        if (!repo.existsById(id)) {
+            throw new NotFoundException("Carro não encontrado");
+        }
+        repo.softDelete(id);
     }
 
     public Funcionario login(String matricula, String senha) {
@@ -51,8 +63,7 @@ public class FuncionarioService {
                 .orElseThrow(() -> new NotFoundException("Funcionário não encontrado"));
     }
 
-    public List<Funcionario> buscar(String nome) {
-        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(nome);
+    public List<Funcionario> buscar(String termo) {
+        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(termo);
     }
-
 }

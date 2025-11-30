@@ -1,4 +1,5 @@
 package com.example.java_crud.Controllers;
+import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +34,13 @@ public class ClienteController {
     }
 
     @PostMapping
-    public Cliente salvar(@RequestBody Cliente cliente) {
+    public Cliente salvar(@RequestBody Cliente cliente)
+    {
         return service.salvar(cliente);
     }
 
     @PutMapping("/{id}")
-    public Cliente editar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public Cliente editar(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
         cliente.setId(id);
         return service.salvar(cliente);
     }

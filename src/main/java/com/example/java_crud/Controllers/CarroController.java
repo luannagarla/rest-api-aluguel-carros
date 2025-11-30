@@ -3,6 +3,7 @@ package com.example.java_crud.Controllers;
 import com.example.java_crud.Exceptions.ValidationException;
 import com.example.java_crud.Models.Carro;
 import com.example.java_crud.Services.CarroService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,8 @@ public class CarroController {
     }
 
     @PostMapping
-    public ResponseEntity<?> salvar(@RequestBody Carro carro) {
+    public ResponseEntity<?> salvar(@Valid @RequestBody Carro carro)
+    {
         try {
             return ResponseEntity.ok(service.salvar(carro));
         } catch (ValidationException ex) {
@@ -39,7 +41,7 @@ public class CarroController {
     }
 
     @PutMapping("/{id}")
-    public Carro atualizar(@PathVariable Long id, @RequestBody Carro carro) {
+    public Carro atualizar(@PathVariable Long id, @Valid @RequestBody Carro carro) {
         carro.setId(id);
         return service.salvar(carro);
     }

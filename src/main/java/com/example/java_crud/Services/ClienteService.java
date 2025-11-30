@@ -1,9 +1,12 @@
 package com.example.java_crud.Services;
 
 import com.example.java_crud.Exceptions.NotFoundException;
+import com.example.java_crud.Exceptions.ValidationException;
 import com.example.java_crud.Models.Cliente;
 import com.example.java_crud.Repositories.ClienteRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +21,17 @@ public class ClienteService {
     }
 
     public Cliente salvar(Cliente cliente) {
-        return repo.save(cliente);
+        try {
+            return repo.save(cliente);
+        }
+        catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            throw new ValidationException("E-mail ou CPF já cadastrado.");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new ValidationException("Erro ao salvar cliente: " + e.getMessage());
+        }
     }
 
     public List<Cliente> listarTodos() {
@@ -30,10 +43,12 @@ public class ClienteService {
                 .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
     }
 
+    @Transactional
     public void excluir(Long id) {
-        Cliente c = buscarPorId(id);
-        c.setExcluido(true);
-        repo.save(c);
+        if (!repo.existsById(id)) {
+            throw new NotFoundException("Carro não encontrado");
+        }
+        repo.softDelete(id);
     }
 
     public List<Cliente> listarAtivos() {
@@ -45,8 +60,7 @@ public class ClienteService {
                 .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
     }
 
-    public List<Cliente> buscar(String nome) {
-        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(nome);
+    public List<Cliente> buscar(String termo) {
+        return repo.findByNomeContainingIgnoreCaseAndExcluidoFalse(termo);
     }
-
 }

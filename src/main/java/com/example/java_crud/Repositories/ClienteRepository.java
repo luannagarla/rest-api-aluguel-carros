@@ -1,7 +1,11 @@
 package com.example.java_crud.Repositories;
 
 import com.example.java_crud.Models.Cliente;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +18,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     Optional<Cliente> findByNomeIgnoreCaseAndExcluidoFalse(String nome);
 
     List<Cliente> findByNomeContainingIgnoreCaseAndExcluidoFalse(String nome);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Cliente c SET c.excluido = true WHERE c.id = :id")
+    void softDelete(@Param("id") Long id);
 }

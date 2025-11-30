@@ -1,6 +1,7 @@
 package com.example.java_crud.Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @MappedSuperclass
 public abstract class Veiculo {
@@ -9,14 +10,24 @@ public abstract class Veiculo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "A marca é obrigatória")
     @Column(nullable = false)
     private String marca;
 
+    @NotBlank(message = "O modelo é obrigatório")
     @Column(nullable = false)
     private String modelo;
 
+    @NotNull(message = "O ano é obrigatório")
+    @Min(value = 1950, message = "Ano inválido")
+    @Max(value = 2050, message = "Ano inválido")
     private Integer ano;
 
+    @NotBlank(message = "A placa é obrigatória")
+    @Pattern(
+            regexp = "[A-Za-z]{3}\\d{4}|[A-Za-z]{3}\\d[A-Za-z]\\d{2}",
+            message = "Placa inválida"
+    )
     @Column(nullable = false, unique = true)
     private String placa;
 
